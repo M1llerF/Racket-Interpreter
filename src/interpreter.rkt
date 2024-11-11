@@ -5,6 +5,8 @@
   ; Dispatch based on the type of expression
   (cond
     [(number? expr) expr]  ; Return numbers directly
+    [(boolean? expr) expr]  ; Return booleans directly
+    [(null? expr) '()]     ; Return empty list directly
     [(symbol? expr) (lookup-symbol expr env)]  ; Look up variables
     [(pair? expr) (eval-list expr env)]  ; Handle lists (expressions)
     [else (error "Unsupported expression" expr)]))
@@ -22,8 +24,9 @@
     (cond
       [(member op '(+ - * /)) (eval-arith expr env)]  ; Arithmetic operations
       [(member op '(= < > <= >= equal?)) (eval-relational expr env)]  ; Handle relational operations
-
+      [(member op '(car cdr cons pair?)) (eval-list-ops expr env)]  ; List operations
       [(eq? op 'quote) (eval-quote expr)]  ; Quote expressions
+      [(eq? op 'if)(eval-if expr env)]  ; If expressions
       [else (apply (startEval op env) (map (lambda (e) (startEval e env)) (cdr expr)))])))
 
 ; Evaluator: Handle quote expressions
@@ -31,6 +34,19 @@
   (if (and (pair? expr) (eq? (car expr) 'quote))
       (cadr expr)
       (error "Unsupported quote expression" expr)))
+
+; Evaluator: Handle if
+; Evaluator: Handle if
+(define (eval-if expr env)
+  (let* ([condition (startEval (cadr expr) env)]
+         [then-branch (caddr expr)]
+         [else-branch (if (> (length expr) 3) (cadddr expr) '())])
+    (if condition
+        (startEval then-branch env)
+        (if (> (length expr) 3)
+            (startEval else-branch env)
+            '()))))  ; Return '() if no else-branch is provided
+
 
 ; Evaluating arithmetic operations
 (define (eval-arith expr env)
@@ -142,3 +158,14 @@
   (cond
     [(custom-less-or-equal? x y) #f]
     [else #t]))
+
+; Evaulating list operations
+(define (eval-list-ops expr env)
+  (let* ([arg1 (startEval (cadr expr) env)]
+        [arg2 (if (> (length expr) 2) (startEval (caddr expr) env) '())])
+    (case (car expr)
+      [(car) (if (pair? arg1) (car arg1) (error "car: argument is not a pair" arg1))]
+      [(cdr) (if (pair? arg1) (cdr arg1) (error "cdr: argument is not a pair" arg1))]
+      [(cons) (cons arg1 arg2)]
+      [(pair?) (if (pair? arg1) #t #f)]
+      [else (error "Unsupported list operation" expr)])))
