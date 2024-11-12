@@ -59,3 +59,8 @@ Instead, you need to defer certain parts of the preparation:
 - You prepare **Ingredient A** up to the point where you need **Ingredient B**.
 - You do the same for **Ingredient B.**
 - At that point, both are partially prepared and have enough information to be finished together.
+
+## 2. Handling Let and Letrec
+So both `let` and `letrec` introduce new variables into a local scope, but hey work differently when it comes to recursion: 
+- `let`: Binds each variable to a value and evalautes the body of the expression suing those bindings. Variables defined in `let` cannot refer to each other.
+- `letrec`: Used in recursive bindings where variables need to refer to themselves or to each other. This has been explained above.
