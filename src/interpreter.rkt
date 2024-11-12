@@ -7,15 +7,16 @@
     [(number? expr) expr] ; Return numbers directly
     [(boolean? expr) expr] ; Return booleans directly
     [(null? expr) '()] ; Return empty list directly
-    [(symbol? expr) (lookup-symbol expr env)] ; Look up variables
-    [(pair? expr) (eval-list expr env)] ; Handle lists (expressions)
-    [else (error "Unsupported expression" expr)]))
+    [(symbol? expr) (lookup-symbol expr env)] ; Look up variables in the environment
+    [(pair? expr) (eval-list expr env)] ; Handle compound expressions (lists)
+    [else (error "Unsupported expression" expr)])) ; Handle unsupported expressions
 
-; Environment handling
+; Environment handling: Look up the value of the variable in the environment
 (define (lookup-symbol sym env)
   (let ([val (assoc sym env)])
     (if val
         (let ([v (cdr val)])
+          ; Handle values that need to be forced or evaluated
           (cond
             [(promise? v) (force v)] ; Force promises (used in letrec)
             [(and (pair? v) (eq? (car v) 'lambda))
@@ -28,16 +29,27 @@
 (define (eval-list expr env)
   (let ([op (car expr)])
     (cond
-      [(member op '(+ - * /)) (eval-arith expr env)] ; Arithmetic operations
-      [(member op '(= < > <= >= equal?)) (eval-relational expr env)] ; Handle relational operations
-      [(member op '(car cdr cons pair?)) (eval-list-ops expr env)] ; List operations
-      [(eq? op 'quote) (eval-quote expr)] ; Quote expressions
-      [(eq? op 'if) (eval-if expr env)] ; If expressions
-      [(eq? op 'lambda) (eval-lambda expr env)] ; Lambda expressions
-      [(eq? op 'let) (eval-let expr env)] ; Let expressions
-      [(eq? op 'letrec) (eval-letrec expr env)] ; Letrec expressions
-      [(eq? op 'delay) (eval-delay expr env)]       ; Handle delay
-      [(eq? op 'force) (eval-force expr env)]       ; Handle force
+      ; Handle arithmetic operations
+      [(member op '(+ - * /)) (eval-arith expr env)]
+      ; Handle relational operations
+      [(member op '(= < > <= >= equal?)) (eval-relational expr env)]
+      ; Handle list operations
+      [(member op '(car cdr cons pair?)) (eval-list-ops expr env)]
+      ; Handle 'quote expressions (returning data literally)
+      [(eq? op 'quote) (eval-quote expr)]
+      ; Handle conditional if expressions
+      [(eq? op 'if) (eval-if expr env)]
+      ; Handle lambda expressions
+      [(eq? op 'lambda) (eval-lambda expr env)]
+      ; Handle let expressions for variable binding
+      [(eq? op 'let) (eval-let expr env)]
+      ; Handle letrec expressions for recursive variable binding
+      [(eq? op 'letrec) (eval-letrec expr env)]
+      ; Handle delayed evaluation
+      [(eq? op 'delay) (eval-delay expr env)]
+      ; Handle forcing a delayed evaluation
+      [(eq? op 'force) (eval-force expr env)]
+      ; Handle function application when the operator is a pair
       [(pair? op)
        (let ([func (startEval op env)]
              [args (map (lambda (e) (startEval e env)) (cdr expr))])
@@ -55,13 +67,14 @@
        (let ([func (startEval op env)]
              [args (map (lambda (e) (startEval e env)) (cdr expr))])
          (apply-function func args))])))
-; Evaluator: Handle quote expressions
+
+; Evaluator: Handle quote expressions (returns the quoted data)
 (define (eval-quote expr)
   (if (and (pair? expr) (eq? (car expr) 'quote))
       (cadr expr)
       (error "Unsupported quote expression" expr)))
 
-; Evaluator: Handle if
+; Evaluator: Handle if expressions (conditioanl evaluation)
 (define (eval-if expr env)
   (let* ([condition (startEval (cadr expr) env)]
          [then-branch (caddr expr)]
@@ -74,7 +87,7 @@
             (startEval else-branch env)
             '())))) ; Return '() if no else-branch is provided
 
-; Evaluating arithmetic operations
+; Evaluator: Handle arithmetic operations
 (define (eval-arith expr env)
   (let* ([args (map (lambda (e) (startEval e env)) (cdr expr))])
     (case (car expr)
@@ -92,10 +105,7 @@
          [else (apply / args)])]
       [else (error "Unsupported arithmetic operation" expr)])))
 
-
-
-
-; Custom implementation of relational operations
+; Evaluator: Handle relational operations
 (define (eval-relational expr env)
   (let* ([arg1 (startEval (cadr expr) env)]
          [arg2 (startEval (caddr expr) env)])
@@ -107,7 +117,6 @@
       [(>=) (custom-greater-or-equal? arg1 arg2)]
       [(equal?) (custom-equal? arg1 arg2)])))
 
-; Custom implementation of equal?
 ; Custom implementation of equal?
 (define (custom-equal? x y)
   (cond
@@ -156,7 +165,7 @@
     [(custom-less-or-equal? x y) #f]
     [else #t]))
 
-; Evaulating list operations
+; Evaluator: Handle list operations like car, cdr, cons, etc.
 (define (eval-list-ops expr env)
   (let* ([arg1 (startEval (cadr expr) env)]
          [arg2 (if (> (length expr) 2)
@@ -175,13 +184,13 @@
       [(pair?) (if (pair? arg1) #t #f)]
       [else (error "Unsupported list operation" expr)])))
 
-; Evaluator: Handle lambda expressions
+; Evaluator: Handle lambda expressions (function creation)
 (define (eval-lambda expr env)
   (let ([params (cadr expr)]
         [body (caddr expr)])
     (list 'closure params body env)))
 
-; Evaluator: Handle let expressions
+; Evaluator: Handle let expressions (variable binding)
 (define (eval-let expr env)
   (let* ([bindings (cadr expr)]
          [body (caddr expr)]
@@ -193,7 +202,7 @@
          [new-env (append new-bindings env)])
     (startEval body new-env)))
 
-; Evaluator: Handle letrec expressions
+; Evaluator: Handle letrec expressions (recursive variable binding)
 (define (eval-letrec expr env)
   (letrec ([extended-env
             (append (map (lambda (binding)
@@ -205,7 +214,7 @@
     (startEval (caddr expr) extended-env)))
 
 
-; Function application
+; Function application: Apply a function
 (define (apply-function func args)
   (cond
     ; Built-in procedures
