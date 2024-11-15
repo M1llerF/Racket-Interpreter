@@ -18,6 +18,10 @@
      (check-equal? (startEval 'x env) 10)
      (check-equal? (startEval 'y env) 20))
 
+  ; letrec factorial test
+  (test-case "Letrec Factorial Test"
+    (check-equal? (startEval '(letrec ((fact (lambda (x) (if (= x 0) (quote 1) (* x (fact (- x 1)))))))
+                              (fact 10)) '()) 3628800))
    ; Test quote expressions
    (test-case "Quote Expressions"
      (check-equal? (startEval '(quote a) '()) 'a)
