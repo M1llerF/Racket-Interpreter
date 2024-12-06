@@ -1,4 +1,12 @@
 #lang racket
+
+; To run code with startEval:
+; 1. Pass an expression to evaluate and an environment with variable bindings.
+; 2. Example:
+;    (startEval '(+ x y) '((x . 10) (y . 20)))
+;    This evaluates the expression (+ x y) with x = 10 and y = 20.
+; 3. Output for the example above: 30
+
 (provide startEval) ; Provide startEval for testing files
 ; Main function
 (define (startEval expr env)
