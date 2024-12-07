@@ -9,7 +9,7 @@
 
 (provide startEval) ; Provide startEval for testing files
 ; Main function
-(define (startEval expr env)
+(define (startEval expr (env '()))
   ; Dispatch based on the type of expression
   (cond
     [(number? expr) expr] ; Return numbers directly
