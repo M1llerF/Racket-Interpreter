@@ -1,4 +1,17 @@
 #lang racket
+; Tests for: If Statements in startEval
+; Description: This file contains test cases for validating the implementation of 
+; conditional `if` expressions in the `startEval` function. The tests cover simple
+; conditions, numerical comparisons, nested `if` statements, variable bindings,
+; and handling of `if` expressions without an else branch.
+;
+; Author: Miller Fourie
+; Last Modified: 2024-12-06
+;
+; Note: These tests ensure the correct behavior of conditional logic in the interpreter
+; and validate edge cases such as missing else branches, nested expressions, and dynamic 
+; environments with variable bindings.
+
 (provide if-statement-tests)
 
 (require rackunit)

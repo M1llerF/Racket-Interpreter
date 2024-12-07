@@ -1,5 +1,19 @@
 #lang racket
 
+; Tests for: Relational Operations in startEval
+; Description: This file contains test cases to validate the implementation of relational 
+; operations in the `startEval` interpreter. The tests cover simple comparisons, nested 
+; structures, operations with negative numbers, mixed positive and negative numbers, zero, 
+; and variables.
+;
+; Author: Miller Fourie
+; Last Modified: 2024-12-06
+;
+; Note: These tests ensure correct evaluation of relational operations, including edge cases 
+; involving nested lists, variable environments, and comparisons across various data types. 
+; The tests also validate the interpreter's ability to handle deep structures and complex 
+; scenarios.
+
 (provide relational-tests)
 
 (require rackunit)

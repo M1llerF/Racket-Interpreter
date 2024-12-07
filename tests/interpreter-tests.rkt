@@ -1,5 +1,17 @@
 #lang racket
 
+; Tests for: General Interpreter Functionality in startEval
+; Description: This file contains comprehensive test cases to validate the core 
+; functionality of the `startEval` interpreter. It includes tests for constants, 
+; variable lookups, recursive bindings (`letrec`), and quote expressions.
+;
+; Author: Miller Fourie
+; Last Modified: 2024-12-06
+;
+; Note: These tests demonstrate the correctness of fundamental features of the interpreter, 
+; including handling literals, environment lookups, recursion via `letrec`, and quoted 
+; expressions. Edge cases and expected results for various scenarios are also covered.
+
 (provide interpreter-tests)
 
 (require rackunit)

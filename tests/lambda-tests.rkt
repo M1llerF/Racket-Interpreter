@@ -1,5 +1,19 @@
 #lang racket
 
+; Tests for: Lambda Expressions in startEval
+; Description: This file contains test cases for validating the evaluation of lambda expressions 
+; in the `startEval` interpreter. The tests cover simple lambda expressions, multiple arguments, 
+; lambdas returning other lambdas, nested lambdas, lambdas within environments, and lambdas with 
+; complex body expressions. Additionally, it tests lambdas bound to variables and their use in 
+; higher-order function contexts.
+;
+; Author: Miller Fourie
+; Last Modified: 2024-12-06
+;
+; Note: These tests ensure that lambda expressions are correctly evaluated and applied across 
+; a variety of use cases, including edge cases such as nested evaluations, dynamic environments, 
+; and higher-order interactions.
+
 (provide lambda-tests)
 
 (require rackunit)

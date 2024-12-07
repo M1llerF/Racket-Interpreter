@@ -1,5 +1,21 @@
 #lang racket
 
+; Project: startEval - A Racket Interpreter
+; Description: This project implements an interpreter for a subset of Racket within Racket. 
+; The main functionality is the evaluation of Racket programs using the `startEval` function. 
+; This includes handling constants, variables, arithmetic, relational operators, lists, 
+; conditional expressions, lambdas, function applications, and local bindings.
+;
+; Author: Miller Fourie
+; Contact: millerfwork@gmail.com
+; Last Modified: 2024-12-06
+;
+; Course: CPSC 3740 - Fall 2024
+; Instructor: Dr. John Zhang
+; Specifications: This interpreter was designed as per the guidelines provided in the 
+; course project. The implementation avoids using Racket's `eval` and focuses on creating 
+; a custom evaluation function with no side effects.
+
 ; To run code with startEval:
 ; 1. Pass an expression to evaluate and an environment with variable bindings.
 ; 2. Example:

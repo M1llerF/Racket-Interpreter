@@ -1,5 +1,19 @@
 #lang racket
 
+; Combined Tests for: startEval Interpreter
+; Description: This file combines and executes all individual test suites for the 
+; `startEval` interpreter. It ensures that all aspects of the interpreter, including 
+; arithmetic operations, conditional statements, list operations, lambda expressions, 
+; and local/recursive bindings, are thoroughly tested.
+;
+; Author: Miller Fourie
+; Last Modified: 2024-12-06
+;
+; Note: This combined test suite is designed to streamline testing and provide a 
+; comprehensive overview of the interpreter's functionality. All individual test 
+; files are required and run within a unified framework to validate the entire 
+; implementation.
+
 (require rackunit)
 (require rackunit/text-ui)
 

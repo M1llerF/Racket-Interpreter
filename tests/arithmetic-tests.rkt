@@ -1,4 +1,16 @@
 #lang racket
+
+; Tests for: Arithmetic Operations in startEval
+; Description: This file contains test cases validating arithmetic operations implemented
+; in the `startEval` function. It tests basic operations (+, -, *, /), division by zero,
+; and order of operations to ensure correctness and edge-case handling in the interpreter.
+;
+; Author: Miller Fourie
+; Last Modified: 2024-12-06
+;
+; Note: These tests aim to demonstrate the robustness and reliability of arithmetic
+; evaluation within the interpreter, focusing on correctness and error handling for invalid input.
+
 (provide arithmetic-tests)
 
 (require rackunit)

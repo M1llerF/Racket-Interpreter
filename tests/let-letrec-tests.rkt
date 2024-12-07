@@ -1,5 +1,20 @@
 #lang racket
 
+; Tests for: Let and Letrec Bindings in startEval
+; Description: This file contains test cases for validating the implementation of `let` 
+; and `letrec` expressions in the `startEval` interpreter. The tests include simple 
+; bindings, nested expressions, shadowing, multiple bindings, recursive definitions, 
+; mutual recursion, interdependent bindings, delayed evaluation, and complex nested 
+; scenarios combining `let` and `letrec`.
+;
+; Author: Miller Fourie
+; Last Modified: 2024-12-06
+;
+; Note: These tests ensure that local and recursive bindings are correctly evaluated 
+; and handle various edge cases, including mutual recursion, interdependencies, and 
+; delayed evaluation. They also validate the proper scoping and shadowing behavior of 
+; `let` and `letrec`.
+
 (provide let-letrec-tests)
 
 (require rackunit)
