@@ -11,7 +11,7 @@
 ; Last Modified: 2024-12-06
 ;
 ; Course: CPSC 3740 - Fall 2024
-; Instructor: Dr. John Zhang
+; Instructor: Dr. Howard Cheng
 ; Specifications: This interpreter was designed as per the guidelines provided in the 
 ; course project. The implementation avoids using Racket's `eval` and focuses on creating 
 ; a custom evaluation function with no side effects.
